@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Release-skill 五平台自动发文 · 命令行入口
+"""multi-publish-skill 五平台自动发文 · 命令行入口
 
 用法:
   python run_publish.py --platform douyin --content-file content/example_content.yaml --mode draft

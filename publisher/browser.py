@@ -1,4 +1,4 @@
-"""Release-skill 五平台自动发文 · 有头浏览器生命周期管理
+"""multi-publish-skill 五平台自动发文 · 有头浏览器生命周期管理
 
 硬约束:全程有头。headless=False 在本模块内恒定,不提供任何无头开关。
 """

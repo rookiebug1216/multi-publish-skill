@@ -1,1 +1,1 @@
-"""Release-skill publisher 包"""
+"""multi-publish-skill publisher 包"""

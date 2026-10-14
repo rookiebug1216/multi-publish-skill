@@ -1,4 +1,4 @@
-"""Release-skill 五平台自动发文 · 配置加载"""
+"""multi-publish-skill 五平台自动发文 · 配置加载"""
 import re
 from pathlib import Path
 

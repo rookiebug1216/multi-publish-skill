@@ -1,9 +1,9 @@
 ---
-name: release-skill
+name: multi-publish-skill
 description: 五平台自动发文技能（抖音/快手/闲鱼/58同城/头条），基于有头浏览器 Playwright 自动化，支持登录态复用、草稿/发布双模式、结构化台账。当用户要在这些平台发布视频/图文/闲置/信息时使用。
 ---
 
-# Release-skill · 五平台自动发文
+# multi-publish-skill · 五平台自动发文
 
 ## 功能
 用**可见浏览器窗口**（非无头）自动向五个平台投递内容：
@@ -71,7 +71,7 @@ platform_overrides:  # 按平台覆盖
 
 ## 目录结构
 ```
-Release-skill/
+multi-publish-skill/
 ├── SKILL.md                ← 本文件（技能说明）
 ├── README.md               ← 快速上手
 ├── run_publish.py          ← CLI 入口

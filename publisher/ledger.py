@@ -1,4 +1,4 @@
-"""Release-skill 五平台自动发文 · 结构化台账
+"""multi-publish-skill 五平台自动发文 · 结构化台账
 
 双写:
 - ledger/publish_ledger.csv   人工可读、Excel 可开

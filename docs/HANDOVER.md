@@ -1,4 +1,4 @@
-# Release-skill 交接文档
+# multi-publish-skill 交接文档
 
 > 五平台自动发文技能（抖音/快手/闲鱼/58同城/头条）· 基于 Playwright 有头浏览器
 > 本文档面向接手者，覆盖：环境安装 → 首次登录 → 日常发文 → 验证码处理 → 故障排查。
@@ -214,7 +214,7 @@ python run_publish.py --platform xianyu --content-file content\my.yaml --mode dr
 ## 8. 目录速查
 
 ```
-Release-skill\
+multi-publish-skill\
 ├── SKILL.md / README.md / docs\HANDOVER.md   文档三件套
 ├── run_publish.py                            CLI 入口
 ├── config\settings.yaml                      全局设置

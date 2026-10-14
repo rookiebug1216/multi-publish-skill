@@ -1,4 +1,4 @@
-# Release-skill · 五平台自动发文（有头浏览器）
+# multi-publish-skill · 五平台自动发文（有头浏览器）
 
 抖音 · 快手 · 闲鱼 · 58同城 · 头条 一键自动发文，全程可见浏览器窗口，登录一次长期复用。
 
@@ -7,7 +7,7 @@
 本仓库是一个 **Agent Skill**。你不用手动敲命令——把下面整段话发给你的 AI 助手（Trae / Claude Code / Cursor / 任意 Agent），它就能自己完成克隆、装依赖、自检与首次登录：
 
 ```text
-请帮我安装并自检 GitHub 上的「Release-skill · 五平台自动发文」技能。
+请帮我安装并自检 GitHub 上的「multi-publish-skill · 五平台自动发文」技能。
 
 仓库地址：https://github.com/rookiebug1216/multi-publish-skill
 
@@ -25,7 +25,7 @@
 登录态目录 browser-profile/ 含账号凭据，禁止提交到任何公开仓库。
 ```
 
-装好后即可用自然语言驱动，例如：「用 Release-skill 把 content/example_content.yaml 以草稿模式发到抖音和头条」。
+装好后即可用自然语言驱动，例如：「用 multi-publish-skill 把 content/example_content.yaml 以草稿模式发到抖音和头条」。
 
 ## 三步上手
 
