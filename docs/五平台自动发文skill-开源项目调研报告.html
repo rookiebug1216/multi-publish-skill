@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五平台自动发文 skill · 开源项目调研报告</title>
+<style>
+  :root{
+    --ink:#111111; --paper:#ffffff; --accent:#d02c2f; --hair:#d8d8d8;
+    --gray:#6b6b6b; --panel:#f6f6f4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:"Source Han Sans SC","Noto Sans SC","Microsoft YaHei",-apple-system,sans-serif;
+    color:var(--ink); background:var(--paper);
+    line-height:1.7; font-size:15px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:0 32px 96px;}
+
+  /* ===== 网格页眉 ===== */
+  header{
+    border-bottom:3px solid var(--ink);
+    padding:56px 0 32px; margin-bottom:0;
+  }
+  .kicker{
+    font-size:12px; letter-spacing:0.28em; text-transform:uppercase;
+    color:var(--accent); font-weight:700; margin-bottom:16px;
+  }
+  h1{
+    font-size:42px; line-height:1.2; font-weight:900; letter-spacing:-0.01em;
+    max-width:820px;
+  }
+  .meta-grid{
+    display:grid; grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--ink); margin-top:36px;
+  }
+  .meta-grid>div{padding:14px 16px 0 0; border-right:1px solid var(--hair); padding-left:16px;}
+  .meta-grid>div:first-child{padding-left:0;}
+  .meta-grid>div:last-child{border-right:none;}
+  .meta-k{font-size:11px; letter-spacing:0.18em; color:var(--gray); text-transform:uppercase;}
+  .meta-v{font-size:14px; font-weight:700; margin-top:4px;}
+
+  /* ===== 章节骨架 ===== */
+  .section{display:grid; grid-template-columns:200px 1fr; gap:40px; padding:52px 0; border-bottom:1px solid var(--hair);}
+  .section h2{
+    font-size:13px; letter-spacing:0.22em; font-weight:800; color:var(--accent);
+    text-transform:uppercase; position:sticky; top:24px; align-self:start;
+  }
+  .section h2 .no{display:block; font-size:32px; color:var(--ink); letter-spacing:0; margin-bottom:6px;}
+  .content{max-width:780px;}
+  .content p{margin-bottom:14px;}
+  .content p.lede{font-size:17px; font-weight:600;}
+
+  /* ===== 指标行 ===== */
+  .metrics{display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--ink); margin:8px 0 20px;}
+  .metrics>div{padding:18px 16px; border-right:1px solid var(--hair);}
+  .metrics>div:last-child{border-right:none;}
+  .metrics .num{font-size:30px; font-weight:900; letter-spacing:-0.02em;}
+  .metrics .num em{font-style:normal; color:var(--accent);}
+  .metrics .lab{font-size:12px; color:var(--gray); margin-top:2px;}
+
+  /* ===== 表格 ===== */
+  table{width:100%; border-collapse:collapse; margin:16px 0 24px; font-size:13.5px;}
+  th{
+    text-align:left; font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--paper); background:var(--ink); padding:10px 12px; font-weight:700;
+  }
+  td{padding:11px 12px; border-bottom:1px solid var(--hair); vertical-align:top;}
+  tr:nth-child(even) td{background:var(--panel);}
+  td .stars{font-weight:900; white-space:nowrap;}
+  td a{color:var(--ink); text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--accent); word-break:break-all;}
+  .tag{
+    display:inline-block; font-size:11px; font-weight:700; padding:1px 8px;
+    border:1px solid var(--ink); margin-right:4px; white-space:nowrap;
+  }
+  .tag.red{background:var(--accent); border-color:var(--accent); color:#fff;}
+
+  /* ===== 卡片组（平台结论） ===== */
+  .plat{border:1px solid var(--ink); margin-bottom:20px;}
+  .plat-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    background:var(--panel); border-bottom:1px solid var(--ink); padding:12px 18px;
+  }
+  .plat-head h3{font-size:17px; font-weight:900;}
+  .plat-head .en{font-size:11px; letter-spacing:0.2em; color:var(--gray); text-transform:uppercase;}
+  .plat-body{padding:16px 18px;}
+  .plat-body ul{list-style:none;}
+  .plat-body li{padding-left:18px; position:relative; margin-bottom:8px;}
+  .plat-body li::before{content:""; position:absolute; left:0; top:9px; width:8px; height:8px; background:var(--accent);}
+  .borrow{margin-top:10px; padding:10px 14px; border-left:3px solid var(--accent); background:var(--panel); font-size:13.5px;}
+
+  /* ===== 时间线（调研过程） ===== */
+  .tl{border-left:2px solid var(--ink); margin:16px 0 8px 6px; padding-left:22px;}
+  .tl .step{margin-bottom:16px; position:relative;}
+  .tl .step::before{
+    content:""; position:absolute; left:-29px; top:5px; width:12px; height:12px;
+    background:var(--paper); border:2px solid var(--accent); border-radius:50%;
+  }
+  .tl .t{font-size:12px; color:var(--gray); font-variant-numeric:tabular-nums;}
+  .tl .s{font-weight:700;}
+
+  /* ===== 引用块 ===== */
+  .note{border:1px solid var(--ink); padding:16px 20px; margin:18px 0; background:var(--panel);}
+  .note b{color:var(--accent);}
+  footer{padding:40px 0 0; font-size:12px; color:var(--gray); display:flex; justify-content:space-between;}
+  @media (max-width:860px){
+    .section{grid-template-columns:1fr; gap:12px;}
+    .meta-grid,.metrics{grid-template-columns:repeat(2,1fr);}
+    h1{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Release-skill · 调研报告 · Browser-Agent Verified</div>
+  <h1>五平台自动发文开源项目调研报告<br>抖音 / 快手 / 闲鱼 / 58同城 / 头条</h1>
+  <div class="meta-grid">
+    <div><div class="meta-k">调研方式</div><div class="meta-v">AutoGLM Browser Agent<br>（Edge 有头浏览器实采）</div></div>
+    <div><div class="meta-k">采集时间</div><div class="meta-v">2026-09-21<br>13:20 – 13:56 GMT+8</div></div>
+    <div><div class="meta-k">采集规模</div><div class="meta-v">6 轮浏览器任务<br>30 个候选项目</div></div>
+    <div><div class="meta-k">会话留痕</div><div class="meta-v">6 个 Session ID<br>+ 逐轮截图 URL</div></div>
+  </div>
+</header>
+
+<!-- ============ 01 执行摘要 ============ -->
+<div class="section">
+  <h2><span class="no">01</span>执行摘要</h2>
+  <div class="content">
+    <p class="lede">结论：五个平台在 GitHub 上均存在可借鉴的自动化项目，但没有一个项目覆盖全部五平台——用户"可以是单个、也可以是几个"的判断与调研事实完全一致。</p>
+    <div class="metrics">
+      <div><div class="num"><em>30</em></div><div class="lab">候选项目（5 平台 × 前 5）</div></div>
+      <div><div class="num">962</div><div class="lab">最高单仓 Star（kebenxiaoming/matrix）</div></div>
+      <div><div class="num">3</div><div class="lab">确认 MIT 宽松许可可借鉴</div></div>
+      <div><div class="num">5/5</div><div class="lab">平台均有可用借鉴来源</div></div>
+    </div>
+    <p>主借鉴来源定为 <b>kebenxiaoming/matrix</b>（Playwright 多平台发布，抖音+快手直接覆盖）、<b>Superheroff/douyin_uplod</b>（MIT，抖音全流程）、<b>donggeai/xianyu-skills</b>（技能包形态+复用已登录浏览器）、<b>DaBaoAgent/xianyu-auto-publisher</b>（Playwright 闲鱼发布）、<b>zz327455573/liulutong</b>（头条 ProseMirror 编辑器适配）与 <b>r04943083/content-pilot</b>（MIT，Playwright 中文平台工程实践）。58 同城是唯一缺口：唯一"发布向"仓库 pub58 仅 8★ 且已陈旧（PhantomJS 无头路线），调研结论如实记录为"以通用表单自动化方案 + 强人工介入落地"。</p>
+    <p>所有借鉴均为<b>思路 / 流程 / 选择器层面</b>，代码全部自研，并针对调研发现的共性短板做了三项改进：<b>全程有头</b>（多数项目走无头路线，易触发风控且无法人工介入）、<b>选择器集中配置</b>（页面改版只改 YAML 不改代码）、<b>人工介入暂停机制</b>（登录/验证码即暂停等待，不绕过不对抗）。</p>
+  </div>
+</div>
+
+<!-- ============ 02 调研过程 ============ -->
+<div class="section">
+  <h2><span class="no">02</span>调研过程与数据来源</h2>
+  <div class="content">
+    <p class="lede">全部数据来自 AutoGLM Browser Agent 驱动的真实浏览器页面采集，未使用任何搜索 API / RSS / HTTP 接口替代。</p>
+    <div class="tl">
+      <div class="step"><div class="t">13:20 – 13:23 · Session be9c0082</div><div class="s">R1 抖音 — GitHub 搜索"抖音自动发布"，5 项目</div></div>
+      <div class="step"><div class="t">13:24 – 13:31 · Session 23a9511e</div><div class="s">R2 快手 — 三轮搜索变体（kuaishou+自动/快手+upload），5 项目</div></div>
+      <div class="step"><div class="t">13:32 – 13:35 · Session 2cb778b9</div><div class="s">R3 闲鱼 — 搜索"xianyu 自动 发布"，5 项目</div></div>
+      <div class="step"><div class="t">13:36 – 13:45 · Session 40352c28 → 10781536</div><div class="s">R4 58同城 — 首轮 35 步动作超时，重试成功，5 项目</div></div>
+      <div class="step"><div class="t">13:46 – 13:50 · Session 893171ff</div><div class="s">R5 头条 — 搜索"头条号 自动发布"，5 项目</div></div>
+      <div class="step"><div class="t">13:52 – 13:56 · Session 8adde54e</div><div class="s">R6 多平台聚合 — 搜索 social media auto publish，5 项目</div></div>
+    </div>
+    <div class="note"><b>环境留痕：</b>Chrome 端 AutoGLM 扩展在 0.0.8→0.1.6 更新后处于禁用状态（disable_reasons=[8192]），前两次探活失败后按浏览器偏好切换 Edge 通道，全部调研在 Edge 有头窗口完成；每次调用的 Session ID、tab_id、起始 URL、最终截图 URL 已逐轮记录于工作台 research/browser-provenance.md，报告内 30 个仓库地址均可点击回访。</div>
+  </div>
+</div>
+
+<!-- ============ 03 分平台调研结果 ============ -->
+<div class="section">
+  <h2><span class="no">03</span>分平台候选项目</h2>
+  <div class="content">
+
+    <div class="plat">
+      <div class="plat-head"><h3>抖音</h3><span class="en">Douyin · creator.douyin.com</span></div>
+      <div class="plat-body">
+        <table>
+          <tr><th>项目</th><th>Star</th><th>语言 / 许可</th><th>功能与借鉴点</th></tr>
+          <tr><td><a href="https://github.com/Superheroff/douyin_uplod">Superheroff/douyin_uplod</a> <span class="tag red">主借鉴</span></td><td class="stars">569</td><td>Python / MIT</td><td>自动上传发布视频，支持话题、@人、视频抽帧、Docker 部署。借鉴：上传流程与话题交互</td></tr>
+          <tr><td><a href="https://github.com/withwz/douyin_upload">withwz/douyin_upload</a></td><td class="stars">164</td><td>Python / MIT</td><td>并发批量上传，代码精简易对接。借鉴：批量组织方式</td></tr>
+          <tr><td><a href="https://github.com/Richard0403/dy-auto">Richard0403/dy-auto</a></td><td class="stars">130</td><td>Python / MIT</td><td>ffmpeg 生成+字幕+自动发布。借鉴：发布页元素定位</td></tr>
+          <tr><td><a href="https://github.com/spider-ios/autox-release">spider-ios/autox-release</a></td><td class="stars">1.1k</td><td>Java/Kotlin</td><td>安卓 AutoX 多平台群发。仅借鉴产品思路（App 端，不适用网页）</td></tr>
+          <tr><td><a href="https://github.com/TheSongg/apostify">TheSongg/apostify</a></td><td class="stars">82</td><td>Python / Apache-2.0</td><td>Telegram Bot 驱动多平台发布。借鉴：渠道抽象</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="plat">
+      <div class="plat-head"><h3>快手</h3><span class="en">Kuaishou · cp.kuaishou.com</span></div>
+      <div class="plat-body">
+        <table>
+          <tr><th>项目</th><th>Star</th><th>语言 / 许可</th><th>功能与借鉴点</th></tr>
+          <tr><td><a href="https://github.com/kebenxiaoming/matrix">kebenxiaoming/matrix</a> <span class="tag red">主借鉴</span></td><td class="stars">962</td><td>Python</td><td>抖音/快手/视频号/小红书矩阵分发，Playwright 实现。借鉴：平台适配层、登录态持久化、发布流程抽象——与本项目技术路线完全一致</td></tr>
+          <tr><td><a href="https://github.com/xixihhhh/clipforge">xixihhhh/clipforge</a></td><td class="stars">850</td><td>TypeScript</td><td>AI 带货短视频生成+多平台分发。借鉴：分发出口设计</td></tr>
+          <tr><td><a href="https://github.com/cmlanche/jixieshou-autowatch-kuaishou">cmlanche/jixieshou-autowatch</a></td><td class="stars">404</td><td>Java</td><td>自动看视频 App。不采用（与发布无关）</td></tr>
+          <tr><td><a href="https://github.com/howhowtocook/video_auto_upload">howhowtocook/video_auto_upload</a></td><td class="stars">19</td><td>Python</td><td>多平台上传，cookie 按平台子目录组织。借鉴：登录态目录结构</td></tr>
+          <tr><td><a href="https://github.com/XXXXBully/social-auto-upload-tool">XXXXBully/social-auto-upload-tool</a></td><td class="stars">12</td><td>Python+Vue</td><td>前后端分离上传工具（含百家号/TikTok）。借鉴：平台清单与架构</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="plat">
+      <div class="plat-head"><h3>闲鱼</h3><span class="en">Xianyu · goofish.com</span></div>
+      <div class="plat-body">
+        <table>
+          <tr><th>项目</th><th>Star</th><th>语言 / 许可</th><th>功能与借鉴点</th></tr>
+          <tr><td><a href="https://github.com/Evvvvvvwan/XianYuSmart">Evvvvvvwan/XianYuSmart</a></td><td class="stars">62</td><td>Java+Vue</td><td>全流程运营系统（发布/客服/自动发货）。借鉴：功能版图（主走协议端）</td></tr>
+          <tr><td><a href="https://github.com/donggeai/xianyu-skills">donggeai/xianyu-skills</a> <span class="tag red">主借鉴</span></td><td class="stars">19</td><td>Python</td><td>Chrome 扩展+本地 CLI，复用已登录账号完成商品发布/搜索/互动。借鉴：★技能包形态与"复用已登录浏览器"思路，与本项目同构</td></tr>
+          <tr><td><a href="https://github.com/najiuwanan/xianyu-Plus">najiuwanan/xianyu-Plus</a></td><td class="stars">17</td><td>Java+Vue</td><td>私有化运营助手。借鉴：多账号管理</td></tr>
+          <tr><td><a href="https://github.com/xiaotuzhenji/xianyu-lite-v2">xiaotuzhenji/xianyu-lite-v2</a></td><td class="stars">7</td><td>Python+TS</td><td>轻量发布管理。借鉴：轻量化取舍</td></tr>
+          <tr><td><a href="https://github.com/DaBaoAgent/xianyu-auto-publisher">DaBaoAgent/xianyu-auto-publisher</a> <span class="tag red">主借鉴</span></td><td class="stars">4</td><td>Python</td><td>Playwright 闲鱼发布机器人（选图/裁切/拟人发布）。借鉴：★网页端发布工程实践</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="plat">
+      <div class="plat-head"><h3>58同城</h3><span class="en">58.com · bang.58.com</span></div>
+      <div class="plat-body">
+        <table>
+          <tr><th>项目</th><th>Star</th><th>语言 / 许可</th><th>功能与借鉴点</th></tr>
+          <tr><td><a href="https://github.com/lihansunbai/Fang_Scrapy">lihansunbai/Fang_Scrapy</a></td><td class="stars">330</td><td>Python</td><td>58/链家/安居客房价爬虫。借鉴：58 域名请求组织与反爬经验</td></tr>
+          <tr><td><a href="https://github.com/Northxw/City58">Northxw/City58</a></td><td class="stars">66</td><td>Python</td><td>全国房产信息爬虫。借鉴：详情页 URL 规律</td></tr>
+          <tr><td><a href="https://github.com/naginoa/python-spider">naginoa/python-spider</a></td><td class="stars">27</td><td>Jupyter</td><td>综合爬虫集。参考案例</td></tr>
+          <tr><td><a href="https://github.com/newcitysoft-org/pub58">newcitysoft-org/pub58</a> <span class="tag red">唯一发布向</span></td><td class="stars">8</td><td>Java</td><td>58 信息发布器（二手车）：PhantomJS+selenium 无头自动发布，AutoPost/BrowserCreator/ImageDownloader 模块分解。借鉴：★发布流程分解思路；无头路线与本项目有头硬约束相反，不采用其技术栈；项目已陈旧</td></tr>
+          <tr><td><a href="https://github.com/hequan2017/58job-scraper">hequan2017/58job-scraper</a></td><td class="stars">2</td><td>Python</td><td>招聘爬虫。无发布价值</td></tr>
+        </table>
+        <div class="borrow"><b>如实记录的缺口：</b>GitHub 上不存在活跃、高质量的 58 同城"网页端自动发布"开源项目（唯一发布向 pub58 仅 8★、PhantomJS 已弃用、star 低）。本 skill 的 58 链路按"通用浏览器表单自动化 + 类目配置 + 强人工介入"落地，表单流程分解参考 pub58 的模块思路。</div>
+      </div>
+    </div>
+
+    <div class="plat">
+      <div class="plat-head"><h3>头条</h3><span class="en">Toutiao · mp.toutiao.com</span></div>
+      <div class="plat-body">
+        <table>
+          <tr><th>项目</th><th>Star</th><th>语言 / 许可</th><th>功能与借鉴点</th></tr>
+          <tr><td><a href="https://github.com/DNQtech/wechat_publiser">DNQtech/wechat_publiser</a></td><td class="stars">16</td><td>JavaScript</td><td>mediaflow 发布助手 v6：公众号+百家号+头条号+抖音+视频号。借鉴：多平台任务编排</td></tr>
+          <tr><td><a href="https://github.com/DNQtech/baowen-publisher">DNQtech/baowen-publisher</a></td><td class="stars">14</td><td>JS/Electron</td><td>爬文工厂：25+ 类目监控、AI 排版、矩阵号管理。借鉴：Electron 架构与内容导入流水线</td></tr>
+          <tr><td><a href="https://github.com/OceanBBBBbb/auto_write_toutiaohao">OceanBBBBbb/auto_write_toutiaohao</a></td><td class="stars">7</td><td>Python</td><td>头条号自动发文（含内容生成，本 skill 不采用生成部分）。借鉴：发布流程 Python 实践</td></tr>
+          <tr><td><a href="https://github.com/zz327455573/liulutong">zz327455573/liulutong</a> <span class="tag red">主借鉴</span></td><td class="stars">3</td><td>JavaScript</td><td>六路通：观察者决策模式发布到小红书/抖音/百家号/头条号/知乎/公众号，注明头条编辑器为 ProseMirror 系。借鉴：★编辑器适配细节，验证本项目 contenteditable 策略</td></tr>
+          <tr><td><a href="https://github.com/niumanju2586/toutiao-publisher">niumanju2586/toutiao-publisher</a> <span class="tag red">形态同构</span></td><td class="stars">2</td><td>Markdown</td><td>头条自动发布 Skill（浏览器自动化）。借鉴：★"Skill 包+浏览器自动化"形态验证了本项目方向的可行性</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="plat">
+      <div class="plat-head"><h3>多平台聚合（横向参考）</h3><span class="en">Cross-platform</span></div>
+      <div class="plat-body">
+        <table>
+          <tr><th>项目</th><th>Star</th><th>语言 / 许可</th><th>功能与借鉴点</th></tr>
+          <tr><td><a href="https://github.com/wanghaisheng/easy-uploader">wanghaisheng/easy-uploader</a></td><td class="stars">383</td><td>Python</td><td>批量上传调度（YouTube/抖音/TikTok）。借鉴：调度队列（其 headless 路线不采用）</td></tr>
+          <tr><td><a href="https://github.com/r04943083/content-pilot">r04943083/content-pilot</a> <span class="tag red">主借鉴</span></td><td class="stars">9</td><td>Python / MIT</td><td>面向中文平台（小红书/抖音/B站/微博）的 Playwright 自动发布，集成多 AI 模型。借鉴：★Playwright 中文平台工程实践，MIT 许可清晰</td></tr>
+          <tr><td><a href="https://github.com/iamasters-academy/content-engine">iamasters-academy/content-engine</a></td><td class="stars">18</td><td>Python</td><td>Agentic Claude Code 技能+自动发布。借鉴：AI 技能包与发布结合方式</td></tr>
+          <tr><td><a href="https://github.com/ArmanShirzad/SocialMediaContentCreationAndPostingAutomationPlatform">ArmanShirzad/…Platform</a></td><td class="stars">48</td><td>Python</td><td>内容管理自动化。借鉴：内容管道概念</td></tr>
+          <tr><td><a href="https://github.com/obaskly/AutoWP">obaskly/AutoWP</a></td><td class="stars">10</td><td>PHP/Python</td><td>一体化内容平台。借鉴：平台适配层抽象</td></tr>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ 04 许可与风险 ============ -->
+<div class="section">
+  <h2><span class="no">04</span>许可与借鉴风险</h2>
+  <div class="content">
+    <p class="lede">借鉴原则：只取思路、流程与选择器组织方式，不复制代码；主借鉴源均已确认宽松许可或仅做思路参考。</p>
+    <table>
+      <tr><th>借鉴源</th><th>许可</th><th>借鉴方式</th><th>风险评级</th></tr>
+      <tr><td>Superheroff/douyin_uplod（569★）</td><td>MIT</td><td>流程参考（上传/话题交互）</td><td>低 — MIT 允许，代码自研</td></tr>
+      <tr><td>withwz/douyin_upload（164★）</td><td>MIT</td><td>流程参考</td><td>低</td></tr>
+      <tr><td>kebenxiaoming/matrix（962★）</td><td>未在页面确认 <b>①</b></td><td>架构思路参考（适配层/登录态）</td><td>低 — 仅思路级借鉴且代码自研</td></tr>
+      <tr><td>DaBaoAgent/xianyu-auto-publisher（4★）</td><td>未在页面确认 <b>①</b></td><td>工程思路参考</td><td>低 — 同上</td></tr>
+      <tr><td>TheSongg/apostify（82★）</td><td>Apache-2.0</td><td>渠道抽象思路</td><td>低</td></tr>
+      <tr><td>r04943083/content-pilot（9★）</td><td>MIT</td><td>工程实践参考</td><td>低</td></tr>
+      <tr><td>其余项目</td><td>—</td><td>仅产品思路，不涉实现</td><td>低</td></tr>
+    </table>
+    <p><b>①</b> 标注项：浏览器采集时仓库首页许可证徽章未出现在截图可视区，按"思路级借鉴+代码自研"策略风险可控；如需进一步确证，可后续打开仓库 LICENSE 文件核对。所有平台页面元素选择器均由本 skill 在配置文件中自行维护与实测校准，不构成对任何仓库代码的衍生。</p>
+    <div class="note"><b>合规红线（本项目内建）：</b>不绕过验证码、不对抗风控、不存账号密码、不做内容批量生成。各平台使用条款由使用者自行遵守；发文默认 draft 模式，publish 需二次确认。</div>
+  </div>
+</div>
+
+<!-- ============ 05 落地映射 ============ -->
+<div class="section">
+  <h2><span class="no">05</span>调研 → skill 落地映射</h2>
+  <div class="content">
+    <p class="lede">每一条调研结论都落进了交付的技能包，映射关系如下（技能包位于仓库根目录）。</p>
+    <table>
+      <tr><th>调研发现</th><th>落地设计</th><th>对应文件</th></tr>
+      <tr><td>matrix 等项目用 Playwright 实现多平台发布</td><td>Python + Playwright，channel=msedge/chrome 用系统真实浏览器</td><td>publisher/browser.py</td></tr>
+      <tr><td>多数开源项目走无头路线 → 风控高、无法人工介入</td><td><b>headless 恒为 False</b>，无任何无头开关；slow_mo 慢放可观察</td><td>publisher/browser.py（硬编码）</td></tr>
+      <tr><td>xianyu-skills 的"复用已登录浏览器"形态</td><td>persistent profile 复用登录态 + 可选 CDP 连日常浏览器双通道</td><td>publisher/browser.py · docs/HANDOVER.md §5</td></tr>
+      <tr><td>选择器硬编码导致改版即坏（共性短板）</td><td>五平台入口+选择器全部集中在 YAML，支持多候选降序尝试</td><td>config/platforms.yaml</td></tr>
+      <tr><td>liulutong 注明头条编辑器为 ProseMirror 系</td><td>contenteditable 多候选选择器策略</td><td>config/platforms.yaml → toutiao</td></tr>
+      <tr><td>pub58 的发布流程分解（AutoPost/BrowserCreator）</td><td>BasePlatform 模板方法：入口→登录检测→填单→提交→台账</td><td>publisher/base.py</td></tr>
+      <tr><td>58 无活跃开源项目（缺口）</td><td>类目配置 + 强人工介入 + 每步截图</td><td>publisher/wuba.py · settings.yaml</td></tr>
+      <tr><td>开源项目普遍缺少执行留痕</td><td>CSV+JSONL 双写台账 + 每步截图 + HUMAN_DONE 人工介入协议</td><td>publisher/ledger.py · base.py</td></tr>
+    </table>
+  </div>
+</div>
+
+<footer>
+  <div>Release-skill 调研报告 · 由 AutoClaw 生成 · 数据采集 AutoGLM Browser Agent（Edge 有头）</div>
+  <div>2026-09-21</div>
+</footer>
+
+</div>
+</body>
+</html>

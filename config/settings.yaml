@@ -1,0 +1,25 @@
+# 全局设置
+browser:
+  # 浏览器通道:msedge(推荐,系统已装) / chrome
+  channel: msedge
+  # 专用用户数据目录(相对 Release-skill 根):首次手动登录后,登录态保存在此目录自动复用
+  profile_dir: browser-profile
+  # 可选:连接本机已启动浏览器的远程调试端口(如 http://127.0.0.1:9222)
+  # 使用方法:先以 msedge --remote-debugging-port=9222 启动浏览器并登录各平台,再填下面一行
+  cdp_url: ""
+  # 页面操作默认超时(毫秒)
+  default_timeout_ms: 30000
+  # 每步操作之间的慢放(毫秒),便于用户观察;0 可关闭
+  slowmo_ms: 300
+  # 启动时窗口最大化
+  start_maximized: true
+
+interaction:
+  # 遇到登录/验证码时,等待人工处理的最长秒数(默认 15 分钟)
+  human_wait_seconds: 900
+  # 发布前行为: ask(默认,控制台确认后点击发布) / auto(直接点击发布) / never(只填内容,人工点击)
+  auto_submit_default: ask
+
+paths:
+  ledger_dir: ledger
+  verification_dir: verification

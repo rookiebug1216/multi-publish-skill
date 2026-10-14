@@ -1,0 +1,6 @@
+# Release-skill 运行依赖
+# 安装: pip install -r requirements.txt
+# 然后初始化浏览器驱动(使用系统 Edge/Chrome,不下载 chromium):
+#   python -m playwright install msedge --dry-run  # 或直接运行,若系统已装则跳过
+playwright>=1.40
+PyYAML>=6.0

@@ -1,0 +1,189 @@
+# 平台选择器与入口配置(集中维护)
+# 页面改版后只需更新本文件,无需改代码
+# selectors 中每个键的值可以是字符串或字符串列表(多候选,按顺序取第一个可见的)
+
+douyin:
+  display_name: 抖音
+  publish_type: video            # video | image
+  entry_url: https://creator.douyin.com/creator-micro/content/upload
+  selectors:
+    login_wall:
+      - "text=扫码登录"
+      - "text=验证码登录"
+      - "text=密码登录"
+    login_indicator:
+      - "text=上传视频"
+      - "text=点击上传"
+      - "img[class*='avatar']"
+      - "[class*='avatarUrl']"
+    video_entry_card:
+      - "text=发布高清视频"
+      - "text=发布视频"
+    upload_input: "input[type=file]"
+    upload_trigger:
+      - "text=上传视频"
+      - "text=点击上传"
+    image_entry_url: "https://creator.douyin.com/creator-micro/content/publish"
+    title_input:
+      - "input[placeholder*='标题']"
+      - "textarea[placeholder*='标题']"
+    desc_editor:
+      - "[contenteditable='true']"
+      - "div[data-placeholder]"
+      - ".ql-editor"
+      - "textarea[placeholder*='填写']"
+    topic_suggestion: "[class*='topic'] li:first-child"
+    # 自定义封面:点槽位"选择封面" → 弹层点"上传封面"(需 force+file chooser) → 填图 → 点"完成"
+    cover_slot: "[class*='coverControl-']"
+    cover_slot_button: "[class*='cover-Jg3T4p']"
+    cover_upload_text: "上传封面"
+    cover_done_text: "完成"
+    # 注意:必须用精确文案'发布';用 has-text 会命中侧边栏'作品发布'按钮导致误点
+    publish_button:
+      - "button:text-is('发布')"
+      - "button[class*='primary-']:text-is('发布')"
+    draft_button:
+      - "button:has-text('存草稿')"
+      - "button:has-text('存入草稿')"
+      - "button:has-text('保存到草稿')"
+      - "button:has-text('暂存')"
+      - "text=存草稿"
+
+kuaishou:
+  display_name: 快手
+  publish_type: video            # video | article
+  entry_url: https://cp.kuaishou.com/article/publish/video
+  selectors:
+    login_wall:
+      - "text=立即登录"
+      - "text=扫码登录"
+    login_indicator:
+      - "img[class*='avatar']"
+      - "text=发布作品"
+    upload_input: "input[type=file]"
+    upload_trigger:
+      - "text=点击上传"
+      - "text=上传视频"
+    article_entry_url: "https://cp.kuaishou.com/article/publish/long"
+    desc_editor:
+      - "[contenteditable='true']"
+      - "textarea"
+    # 自定义封面:点封面预览 → 弹层切"上传封面"tab → 图片 input 填图 → 确认
+    cover_entry:
+      - "[class*='_default-cover']"
+      - "[class*='_cover-full-editor']"
+    cover_tab: ".ant-modal [class*='header-title-item']"
+    cover_upload_input: "input[type=file][accept*='image']"
+    cover_confirm:
+      - ".ant-modal button:has-text('确认')"
+      - ".ant-modal [role=button]:has-text('确认')"
+    publish_button:
+      - "button:has-text('发布')"
+      - "text=发布"
+    draft_button:
+      - "button:has-text('存草稿')"
+      - "button:has-text('存入草稿')"
+      - "button:has-text('保存草稿')"
+      - "text=存草稿"
+
+xianyu:
+  display_name: 闲鱼
+  entry_url: https://www.goofish.com/publish
+  selectors:
+    login_wall:
+      - "text=扫码登录"
+      - "text=短信登录"
+      - "text=手机扫码安全登录"
+      - "text=登录淘宝"
+    login_indicator:
+      - "text=发布"
+      - "text=发闲置"
+      - "[class*='avatar']"
+    publish_entry: "text=发闲置"
+    title_input:
+      - "input[placeholder*='标题']"
+      - "textarea[placeholder*='标题']"
+    desc_editor:
+      - "textarea[placeholder*='描述']"
+      - "[contenteditable='true']"
+    price_input:
+      - "input[placeholder*='价格']"
+      - "input[type=number]"
+    upload_input: "input[type=file]"
+    upload_trigger:
+      - "text=添加首图"
+      - "text=添加图片"
+    publish_button:
+      - "button:has-text('发布')"
+      - "text=发布"
+
+wuba:
+  display_name: 58同城
+  # 发布线:rent=租房线(仅图片) / used_car=二手车线(图片+视频,唯一双支持)
+  line: used_car
+  used_car_entry_url: https://post.58.com/che/102/29/s5
+  category: ""                   # 直链已含类目,无需类目配置
+  entry_url: https://zfang.58.com/post/pc/zhengzu?cityId=102
+  publish_entry: ""              # 直链已含身份弹窗逻辑
+  selectors:
+    login_wall:
+      - "text=短信登录"
+      - "text=密码登录"
+    login_indicator:
+      - "text=我要卖房"
+      - "text=退出"
+    publish_entry:
+      - "text=免费发布信息"
+      - "text=免费发布"
+    dismiss_overlay:
+      - "[class*='close'] [class*='icon']"
+      - "text=×"
+    title_input:
+      - "input[placeholder*='标题']"
+      - "input[name='title']"
+    desc_editor:
+      - "textarea[placeholder*='描述']"
+      - "textarea[name='description']"
+    price_input:
+      - "input[placeholder*='价格']"
+      - "input[name='price']"
+    upload_input: "input[type=file]"
+    upload_trigger:
+      - "text=上传图片"
+      - "text=添加图片"
+    publish_button:
+      - "button:has-text('发布')"
+      - "text=立即发布"
+    draft_button:
+      - "button:has-text('存草稿')"
+
+toutiao:
+  display_name: 头条
+  publish_type: article          # article | video
+  entry_url: https://mp.toutiao.com/profile_v4/graphic/publish
+  selectors:
+    login_wall:
+      - "text=手机绑定"
+      - "text=扫码登录"
+      - "text=验证码登录"
+    login_indicator:
+      - "text=发布文章"
+      - "text=草稿将自动保存"
+      - "img[class*='avatar']"
+      - "[class*='avatar']"
+    video_entry_url: "https://mp.toutiao.com/profile_v4/video/publish"
+    title_input:
+      - "textarea[placeholder*='标题']"
+      - "input[placeholder*='标题']"
+    article_editor:
+      - "[contenteditable='true']"
+      - ".ProseMirror"
+    upload_input: "input[type=file]"
+    desc_editor:
+      - "textarea[placeholder*='简介']"
+      - "[contenteditable='true']"
+    publish_button:
+      - "button:has-text('发布')"
+      - "text=预览并发布"
+    draft_button:
+      - "button:has-text('存草稿')"

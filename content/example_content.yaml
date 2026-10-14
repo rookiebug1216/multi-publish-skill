@@ -1,0 +1,31 @@
+# 内容文件样例
+# 用法: python run_publish.py --platform douyin --content-file content/example_content.yaml --mode draft
+# 各平台按需取用字段;media_files 用绝对路径
+
+# 通用字段
+title: "示例标题(各平台通用)"
+description: "示例描述/简介文本"
+body: |
+  图文正文(头条图文/快手长文使用),
+  支持多段落。
+price: ""            # 闲鱼/58 等交易平台使用
+
+# 媒体文件(视频/图片),绝对路径
+media_files: []
+  # - C:\Users\you\Videos\demo.mp4
+  # - C:\Users\you\Pictures\pic1.jpg
+
+# 抖音/快手话题标签
+topics: []
+  # - 数码
+  # - 开箱
+
+# ---- 按平台覆盖(可选,优先级高于通用字段) ----
+platform_overrides:
+  douyin:
+    description: "抖音专用描述 #话题"
+  xianyu:
+    title: "【闲置出】示例商品"
+    price: "99"
+  toutiao:
+    title: "头条文章标题"
